@@ -16,6 +16,8 @@
 #include <QJsonArray>
 #include <QDir>
 #include <QStandardPaths>
+#include <QListWidget>
+#include <QTextEdit>
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -25,16 +27,21 @@ public:
     ~MainWindow();
 
 private slots:
-    void showRegistration();
-    void showLogin();
+    void showLoginForm();
+    void showRegistrationForm();
+    void showMainMenu();
     void registerUser();
     void loginUser();
     void showChat();
     void sendMessage();
+    void searchUser();
+    void handleChatSelection(QListWidgetItem *item);
+    void openPrivateChat(const QString &username);
 
 private:
     QStackedWidget *stackedWidget;
-    QWidget *authWidget;
+    QWidget *mainMenuWidget;
+    QWidget *loginWidget;
     QWidget *registrationWidget;
     QWidget *chatWidget;
     
@@ -43,19 +50,30 @@ private:
     QLineEdit *regLoginEdit;
     QLineEdit *regPasswordEdit;
     QLineEdit *messageEdit;
+    QLineEdit *userSearchEdit;
+    
+    QTextEdit *chatDisplay;
+    QListWidget *privateChatList;
     
     QString currentUser;
+    QString currentPrivateChat;
     QString chatFilePath;
+    QString privateChatPath;
     QString archivePath;
     
-    void createAuthWidget();
+    void createMainMenuWidget();
+    void createLoginWidget();
     void createRegistrationWidget();
     void createChatWidget();
     void saveMessage(const QString &message);
+    void savePrivateMessage(const QString &toUser, const QString &message);
     void loadMessages();
+    void loadPrivateMessages(const QString &otherUser);
     void archiveChat();
     bool checkCredentials(const QString &username, const QString &password);
     void saveUser(const QString &username, const QString &password);
+    QString getPrivateChatFileName(const QString &user1, const QString &user2);
+    void updatePrivateChatList();
 };
 
 #endif // MAINWINDOW_H 
